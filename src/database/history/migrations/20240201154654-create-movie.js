@@ -28,16 +28,16 @@ module.exports = {
             createdAt: {
                 field: "created_at",
                 allowNull: false,
-                type: Sequelize.NUMBER,
+                type: Sequelize.INTEGER,
             },
             updatedAt: {
                 field: "updated_at",
                 allowNull: false,
-                type: Sequelize.NUMBER,
+                type: Sequelize.INTEGER,
             },
             createdById: {
                 field: "created_by_id",
-                type: DataType.INTEGER,
+                type: Sequelize.UUID,
                 allowNull: false,
                 references: {
                     model: "users", // name of Target model
@@ -47,7 +47,7 @@ module.exports = {
             },
             updatedById: {
                 field: "updated_by_id",
-                type: DataType.INTEGER,
+                type: Sequelize.UUID,
                 allowNull: false,
                 references: {
                     model: "users", // name of Target model

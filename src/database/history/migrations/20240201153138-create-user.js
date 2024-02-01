@@ -31,12 +31,12 @@ module.exports = {
             createdAt: {
                 field: "created_at",
                 allowNull: false,
-                type: Sequelize.NUMBER,
+                type: Sequelize.INTEGER,
             },
             updatedAt: {
                 field: "updated_at",
                 allowNull: false,
-                type: Sequelize.NUMBER,
+                type: Sequelize.INTEGER,
             },
         });
     },
