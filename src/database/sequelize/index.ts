@@ -1,10 +1,6 @@
-import dayjs from "dayjs";
 import pg from "pg";
 import { Sequelize } from "sequelize";
 import config from "@/config/config";
-
-
-const idleTIme = 1000 * (5 * 60);
 
 export const sequelizeClient = new Sequelize(
     config.database.name,
@@ -16,14 +12,7 @@ export const sequelizeClient = new Sequelize(
         dialect: "postgres",
 
         dialectModule: pg,
-        dialectOptions: {
-            ssl: config.database.enableTLS,
-        },
-        pool: {
-            idle: idleTIme,
-            acquire: 30 * 1000,
-            max: config.database.maxConnections,
-        },
+
         define: {
             timestamps: false,
             freezeTableName: true,
@@ -40,4 +29,4 @@ sequelizeClient
     .catch((err) => {
         console.error("Unable to connect to the database:", err);
     });
-export default initDatabase;
+export default sequelizeClient;

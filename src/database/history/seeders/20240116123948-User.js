@@ -1,19 +1,21 @@
 "use strict";
-const dayjs = require("dayjs");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        queryInterface.bulkInsert(
-            "Users",
+        let d = new Date();
+        let seconds = Math.round(d.getTime() / 1000);
+        await queryInterface.bulkInsert(
+            "users",
             [
                 {
+                    id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
                     first_name: "User",
                     last_name: "1",
                     auth_id: "dsds",
                     email: "user1@example.com",
-                    created_at: dayjs().unix(),
-                    updated_at: dayjs().unix(),
+                    created_at: seconds,
+                    updated_at: seconds,
                 },
             ],
             {}
@@ -27,6 +29,6 @@ module.exports = {
          * Example:
          * await queryInterface.bulkDelete('People', null, {});
          */
-        queryInterface.bulkDelete("Users", null, {});
+        queryInterface.bulkDelete("users", null, {});
     },
 };

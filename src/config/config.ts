@@ -14,8 +14,6 @@ export const appConfig = {
         host: process.env.DB_HOST as string,
         port: process.env.DB_PORT as string,
         name: process.env.DB_NAME as string,
-        enableTLS: false,
-        maxConnections: 5,
     },
     nextAuthSecretKey: process.env.AUTH_SECRET as string,
     projectRoot: process.env.PROJECT_ROOT as string,
