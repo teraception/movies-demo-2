@@ -1,10 +1,11 @@
 export const appConfig = {
     aws: {
-        region: process.env.AWS_REGION as string,
+        region: process.env.NEXT_PUBLIC_AWS_REGION as string,
         accessKey: process.env.AWS_ACCESS_KEY_ID as string,
         secret: process.env.AWS_SECRET_ACCESS_KEY as string,
         bucket: process.env.AWS_BUCKET_NAME as string,
-        userPoolId: process.env.COGNITO_USER_POOL_ID as string,
+        userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID as string,
+        clientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID as string,
     },
     database: {
         url: process.env.DATABASE_URL as string,
