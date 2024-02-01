@@ -1,0 +1,21 @@
+name: Deploy Dev
+on:
+    push:
+        branches: [develop]
+permissions:
+    contents: write
+jobs:
+    dev-workflow:
+        uses: ./.github/workflows/build-and-deploy.yml 
+        with:
+            environment: dev
+            ecr_repo_url: ${{ vars.ecr_repo_url_dev }}
+            docker_user: ${{ vars.docker_user }}
+            aws_region: ${{ vars.aws_region }}
+            aws_key_id: ${{ vars.aws_key_id }}
+            tf_infra_workspace_name: ${{vars.dev_infra_workspace}}
+            aws_account_id: ${{ vars.aws_account_id }}
+            tailscale_login_server: ${{ vars.tailscale_login_server }}
+            docker_compose_path: devops/docker/docker-compose.dev.yml
+            deployment_webhook_url: ${{ vars.deployment_webhook_url_dev }}
+        secrets: inherit

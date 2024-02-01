@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+    movie-demo:
+        restart: always
+        image: 415579337695.dkr.ecr.us-east-2.amazonaws.com/movies-demo-2-dev-movies-demo-2:18
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+            - "traefik.http.middlewares.redirect.redirectscheme.permanent=true"
+            - "traefik.http.routers.movies-demo-2-dev-http.rule=Host(`movies-demo-2-dev.teraception.com`)"
+            - "traefik.http.routers.movies-demo-2-dev-http.entrypoints=web-public"
+            - "traefik.http.routers.movies-demo-2-dev-http.middlewares=redirect"
+            - "traefik.http.routers.movies-demo-2-dev-https.rule=Host(`movies-demo-2-dev.teraception.com`)"
+            - "traefik.http.routers.movies-demo-2-dev-https.entrypoints=websecure-public"
+            - "traefik.http.routers.movies-demo-2-dev-https.tls=true"
+            - "traefik.http.routers.movies-demo-2-dev-https.tls.certresolver=myresolver"
+            - "traefik.http.routers.movies-demo-2-dev.service=movies-demo-2-dev"
+            - "traefik.http.services.movies-demo-2-dev.loadbalancer.server.port=3000"
+        volumes:
+            - movies-disk:/app/public/movies
+        networks:
+            movies-demo-2:
+        environment:
+            - DB_USER=postgres #default
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_HOST=postgres-default14 #from compose
+            - DB_PORT=5432 #default
+            - DB_NAME=${DB_NAME}
+            - AUTH_SECRET=${AUTH_SECRET}
+            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+            - AWS_REGION=${AWS_REGION}
+    postgres14:
+        image: postgres:14
+        volumes:
+            - db:/var/lib/postgresql/data
+        restart: always
+        hostname: postgres-default14
+        networks:
+            movies-demo-2:
+                aliases:
+                    - postgres-default14
+        expose:
+            - 5432
+        ports:
+            - 5437:5432
+        environment:
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_DB=${DB_NAME}
+networks:
+    movies-demo-2:
+volumes:
+    movies-disk:
+    db:
