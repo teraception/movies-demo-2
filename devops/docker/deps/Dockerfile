@@ -10,7 +10,7 @@ ENV NODE_ENV production
 RUN yarn install  --production=false
 
 #creating project build
-COPY --chown=node ["./tsconfig*.json", "./next.config.js", "./tailwind.config.ts", ".sequelizerc"  ,"./postcss.config.js" , "./"]
+COPY --chown=node ["./tsconfig*.json", "./next.config.mjs", "./tailwind.config.ts", ".sequelizerc"  ,"./postcss.config.js" , "./"]
 COPY --chown=node ["./public", "./public"]
 COPY --chown=node ["./src", "./src"]
 RUN yarn run build \
