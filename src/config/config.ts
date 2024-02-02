@@ -4,8 +4,12 @@ export const appConfig = {
         accessKey: process.env.AWS_ACCESS_KEY_ID as string,
         secret: process.env.AWS_SECRET_ACCESS_KEY as string,
         bucket: process.env.AWS_BUCKET_NAME as string,
-        userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID as string,
-        clientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID as string,
+    },
+    cognitoAuth: {
+        region: process.env.NEXT_PUBLIC_AWS_REGION as string,
+        userPoolWebClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
+        userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+        mandatorySignIn: true,
     },
     database: {
         url: process.env.DATABASE_URL as string,

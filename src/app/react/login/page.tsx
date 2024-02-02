@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/app/cognito";
 import { validateEmail } from "@/utils/validateEmail";
 import {
     Typography,
@@ -21,6 +22,8 @@ const useStyles = makeStyles({
 export default function Login() {
     const classes = useStyles();
     const router = useRouter();
+    const { authenticate, loading: loginLoader } = useAuth();
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -50,11 +53,7 @@ export default function Login() {
                     "Password must be at-least 6 characters long";
             }
             if (Object.keys(newErrorState).length === 0) {
-                const resp = await signIn("credentials", {
-                    redirect: false,
-                    email,
-                    password,
-                });
+                const resp = await authenticate(email, password);
 
                 if (resp?.ok) {
                     router.push("/");

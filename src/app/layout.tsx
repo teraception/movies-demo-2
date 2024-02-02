@@ -6,6 +6,8 @@ import Image from "next/image";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import theme from "@/theme";
 import { ThemeProvider } from "@mui/material/styles";
+import { CognitoContextProvider } from "@/app/cognito";
+import { LoggedInUserContextProvider } from "@/app/context/LoggedInUserContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,24 +25,28 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className} style={{ background: "#093545" }}>
                 <AppRouterCacheProvider>
-                    <ThemeProvider theme={theme}>
-                        <>
-                            {children}
-                            <div
-                                style={{
-                                    position: "absolute",
-                                    bottom: 0,
-                                    width: "100vw",
-                                    zIndex: -1,
-                                }}>
-                                <Image
-                                    src={backgroundImg}
-                                    alt="Background"
-                                    style={{ width: "100%" }}
-                                />
-                            </div>
-                        </>
-                    </ThemeProvider>
+                    <CognitoContextProvider>
+                        <LoggedInUserContextProvider>
+                            <ThemeProvider theme={theme}>
+                                <>
+                                    {children}
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            bottom: 0,
+                                            width: "100vw",
+                                            zIndex: -1,
+                                        }}>
+                                        <Image
+                                            src={backgroundImg}
+                                            alt="Background"
+                                            style={{ width: "100%" }}
+                                        />
+                                    </div>
+                                </>
+                            </ThemeProvider>
+                        </LoggedInUserContextProvider>
+                    </CognitoContextProvider>
                 </AppRouterCacheProvider>
             </body>
         </html>
