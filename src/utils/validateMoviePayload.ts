@@ -1,4 +1,4 @@
-import { MoviePayload } from "@/app/movies/domainModels/movie";
+import { MoviePayload } from "@/app/movie/domainModels/movie";
 
 export const validateMoviePayload = (param: MoviePayload): boolean => {
     const keys: (keyof MoviePayload)[] = ["poster", "title", "year"];

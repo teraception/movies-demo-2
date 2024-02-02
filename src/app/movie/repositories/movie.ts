@@ -1,4 +1,4 @@
-import { Movie } from "@/app/movies/domainModels/movie";
+import { Movie } from "@/app/movie/domainModels/movie";
 import movieModel from "@/database/models/movie.schema";
 import { OperationContext } from "@/types/common";
 import {
@@ -38,33 +38,13 @@ export async function addUpdateMovie(movie: Movie, context: OperationContext) {
         movie.updatedById = updatedAtInfo.updatedById;
     }
 
-    if ((movie.id && movie.createdById && movie.title, movie.year)) {
+    if (movie.id) {
         applicableFilters = {
-            [Op.or]: [
-                {
-                    id: movie.id,
-                },
-                {
-                    createdById: movie.createdById,
-                },
-                {
-                    year: movie.year,
-                },
-            ],
+            id: movie.id,
         };
     } else {
         applicableFilters = {
-            [Op.or]: [
-                {
-                    createdById: movie.createdById,
-                },
-                {
-                    title: movie.title,
-                },
-                {
-                    year: movie.year,
-                },
-            ],
+            id: 0,
         };
     }
 
@@ -96,6 +76,7 @@ export async function deleteMovie(movieId: number, context: OperationContext) {
     });
 }
 export async function getMovie(movieId: number) {
+    console.log("movieId", movieId);
     const movie = await movieModel.findOne({
         where: {
             id: movieId,

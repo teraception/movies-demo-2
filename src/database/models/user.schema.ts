@@ -37,12 +37,12 @@ export const userModel = sequelizeClient.define<UserModelType>(
         createdAt: {
             field: "created_at",
             allowNull: false,
-            type: DataTypes.NUMBER,
+            type: DataTypes.BIGINT,
         },
         updatedAt: {
             field: "updated_at",
             allowNull: false,
-            type: DataTypes.NUMBER,
+            type: DataTypes.BIGINT,
         },
     }
 );

@@ -1,4 +1,4 @@
-import { Movie } from "@/app/movies/domainModels/movie";
+import { Movie } from "@/app/movie/domainModels/movie";
 import { sequelizeClient } from "@/database/sequelize";
 import { DataTypes, Model } from "sequelize";
 import dayjs from "dayjs";
@@ -33,29 +33,31 @@ export const movieModel = sequelizeClient.define<MovieModelType>(
         },
         createdAt: {
             field: "created_at",
-            type: DataTypes.NUMBER,
+            type: DataTypes.BIGINT,
             allowNull: false,
             defaultValue: dayjs().unix(),
         },
         createdById: {
             field: "created_by_id",
-            type: DataTypes.NUMBER,
+            type: DataTypes.BIGINT,
             allowNull: false,
         },
         updatedAt: {
             field: "updated_at",
-            type: DataTypes.NUMBER,
+            type: DataTypes.UUID,
             allowNull: false,
             defaultValue: dayjs().unix(),
         },
         updatedById: {
             field: "updated_by_id",
-            type: DataTypes.NUMBER,
+            type: DataTypes.UUID,
             allowNull: false,
         },
     }
 );
 
-movieModel.belongsTo(userModel);
+movieModel.belongsTo(userModel, {
+    foreignKey: "created_by_id",
+});
 
 export default movieModel;

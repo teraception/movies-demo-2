@@ -5,6 +5,10 @@ import { CognitoUserSession } from "amazon-cognito-identity-js";
 import { Auth } from "aws-amplify";
 import { enqueueSnackbar } from "notistack";
 import { useAccessToken } from "@/app/react/hooks/userAccessToken";
+import { amplifyConfigure } from "@/app/cognito/authConfig";
+import { LoggedInUserContext } from "@/app/context/loggedInUserContextProvider";
+
+amplifyConfigure();
 
 interface CognitoContextType {
     isAuthenticated: boolean;
@@ -37,6 +41,7 @@ export const CognitoContextProvider = (props: CognitoContextProps) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const { updateLoggedInUser } = useContext(LoggedInUserContext);
     const [session, setSession] = useState<CognitoUserSession>(null);
     const { expired, setExpired } = useAccessToken(true, session);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -54,9 +59,22 @@ export const CognitoContextProvider = (props: CognitoContextProps) => {
     const loadSession = async () => {
         try {
             const currentSession = await Auth.currentSession();
+            console.log(`🚀 ~ loadSession ~ currentSession:`, currentSession);
             setIsAuthenticated(true);
             setExpired(false);
 
+            const resp = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${currentSession
+                        .getIdToken()
+                        .getJwtToken()}`,
+                },
+            });
+
+            const user = await resp.json();
+            updateLoggedInUser(user);
             setSession(currentSession);
         } catch (error) {
             console.warn(error);
@@ -77,8 +95,12 @@ export const CognitoContextProvider = (props: CognitoContextProps) => {
                 //   state: { email, password },
                 // });
             } else {
-                await Auth.currentSession();
+                const session = await Auth.currentSession();
+
                 setIsAuthenticated(true);
+                loadSession().then(() => {
+                    window.location.reload();
+                });
                 return await Auth.currentAuthenticatedUser();
             }
         } catch (error) {
@@ -90,6 +112,15 @@ export const CognitoContextProvider = (props: CognitoContextProps) => {
 
     const logout = async () => {
         try {
+            const session = await Auth.currentSession();
+            const resp = await fetch("/api/login", {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${session
+                        .getIdToken()
+                        .getJwtToken()}`,
+                },
+            });
             await Auth.signOut();
             window.location.reload();
         } catch (error) {

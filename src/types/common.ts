@@ -3,7 +3,7 @@ import type { Transaction } from "sequelize";
 
 export interface Auditor {
     updatedAt?: number;
-    updatedById?: number;
+    updatedById?: string;
     createdAt?: number;
     createdById?: string;
 }

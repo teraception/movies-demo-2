@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
-    const token = req.headers.get("authorization")?.split(" ") ?? [];
+    let token = req.headers.get("authorization")?.split(" ")[1] ?? null;
+    if (!token) {
+        token = req.cookies.get("auth")?.value;
+    }
+
     // in middleware we can't use getServerSession but we can use getToken to get session indirectly
     const session = !!token;
     const isLogin = req.nextUrl.pathname.includes("login");

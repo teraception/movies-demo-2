@@ -7,8 +7,8 @@ export const appConfig = {
     },
     cognitoAuth: {
         region: process.env.NEXT_PUBLIC_AWS_REGION as string,
-        userPoolWebClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
-        userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+        userPoolWebClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID,
+        userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
         mandatorySignIn: true,
     },
     database: {

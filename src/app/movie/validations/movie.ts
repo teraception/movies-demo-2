@@ -1,4 +1,4 @@
-import { Movie } from "@/app/movies/domainModels/movie";
+import { Movie } from "@/app/movie/domainModels/movie";
 import { z } from "zod";
 
 const movSchema = {
@@ -8,7 +8,9 @@ const movSchema = {
         })
         .min(2, { message: "Title can't be less than 2 characters" }),
     year: z.number().gte(1900, { message: "Year must be greater than 1900." }),
-    userId: z.number(),
+    createdById: z.string(),
+    updatedById: z.string(),
+    poster: z.string(),
 };
 const movieSchema = z.object({
     ...movSchema,
@@ -30,7 +32,7 @@ export function validateMovie(movie: Movie) {
     if (!validatedFields.success) {
         return {
             success: false,
-            errors: validatedFields.error.flatten().fieldErrors,
+            errors: (validatedFields as any).error.flatten().fieldErrors,
         };
     } else {
         return {

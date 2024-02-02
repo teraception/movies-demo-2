@@ -1,15 +1,16 @@
-import { Movie } from "@/app/movies/domainModels/movie";
-import * as movieRepo from "@/app/movies/repositories/movie";
+import { Movie } from "@/app/movie/domainModels/movie";
+import * as movieRepo from "@/app/movie/repositories/movie";
 import { OperationContext } from "@/types/common";
 import {
     getOffsetFromPagination,
+    getPaginationMeta,
     PaginatedResponse,
     PaginationParam,
 } from "@/types/pagination";
 import { s3Helper } from "@/utils/s3Helper";
 
 export function resolveMovie(movie: Movie) {
-    if (movie.poster) {
+    if (movie && movie.poster) {
         movie.poster = s3Helper.getPublicUrl(movie.poster);
     }
     return movie;
@@ -35,14 +36,13 @@ export async function getMoviesByUserId(
         offset,
         pagination.perPage
     );
+    const meta = getPaginationMeta<Movie>(pagination, {
+        items: resp.items,
+        total: resp.total,
+    });
     const paginatedMovies: PaginatedResponse<Movie> = {
         items: resp.items,
-        paginationMeta: {
-            start: offset,
-            end: offset + resp.items.length - 1,
-            perPage: pagination.perPage,
-            totalItems: resp.total,
-        },
+        paginationMeta: meta,
     };
     return paginatedMovies;
 }

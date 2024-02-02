@@ -1,13 +1,13 @@
 "use server";
 
-import { PaginationParam } from "@/types/pagination";
-import * as movieService from "@/app/movies/services/service";
-import { validateMovie } from "@/app/movies/validations/movie";
+import { PaginatedResponse, PaginationParam } from "@/types/pagination";
+import * as movieService from "@/app/movie/services/service";
+import { validateMovie } from "@/app/movie/validations/movie";
 import { initOperationContext } from "@/utils/repoHelpers";
 import { formatResponse } from "@/types/response";
-import { getUser } from "@/app/api/[...nextauth]/helper";
-import { Movie } from "@/app/movies/domainModels/movie";
+import { getUser } from "@/app/api/auth/[...nextauth]/helper";
 import { s3Helper } from "@/utils/s3Helper";
+import { Movie } from "@/app/movie/domainModels/movie";
 
 const PER_PAGE = 10;
 
@@ -15,15 +15,10 @@ export async function getUserMovies(page: number = 1, perPage = PER_PAGE) {
     const user = await getUser();
     const params: PaginationParam = { pageNumber: page, perPage: perPage };
     const resp = await movieService.getMoviesByUserId(user.id, params);
-    return formatResponse<Movie[]>(
-        resp.items.map((m) => movieService.resolveMovie(m)),
-        "SUCCESS",
-        {
-            meta: {
-                paginationInfo: resp.paginationMeta,
-            },
-        }
-    );
+    return formatResponse<PaginatedResponse<Movie>>({
+        items: resp.items.map((m) => movieService.resolveMovie(m)),
+        paginationMeta: resp.paginationMeta,
+    });
 }
 
 const uploadFile = async (file: File) => {
@@ -37,29 +32,40 @@ const uploadFile = async (file: File) => {
 
 export async function createUpdateMovie(data: FormData) {
     const user = await getUser();
-    const movieData: Movie = {
+
+    let movieData: Movie = {
         id: Number(data.get("id")),
         title: String(data.get("title")),
         year: Number(data.get("year")),
         createdById: user.id,
+        updatedById: user.id,
         poster: null,
     };
+
     const file: File | null = data.get("file") as unknown as File;
 
     let filePath;
     if (file) {
         filePath = await uploadFile(file);
     }
-    const validated = validateMovie({
+    movieData = {
         ...movieData,
         createdById: user.id,
+        updatedById: user.id,
         poster: filePath,
-    });
+    };
+    movieData.id = movieData.id == 0 ? null : movieData.id;
+    if (movieData.id && movieData.poster == null) {
+        movieData.poster = (
+            await movieService.getMovieById(movieData.id)
+        ).poster;
+    }
+    const validated = validateMovie(movieData);
 
     // Return early if the form data is invalid
     if (!validated.success) {
         return {
-            errors: validated.errors.flatten().fieldErrors,
+            errors: validated.errors,
         };
     }
 

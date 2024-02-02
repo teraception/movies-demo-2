@@ -1,8 +1,10 @@
 export interface PaginationInfoDetail {
+    totalItems: number;
     start: number;
     end: number;
     perPage: number;
-    totalItems: number;
+    currentPage: number;
+    totalPages: number;
 }
 
 export interface PaginatedResponse<T> {
@@ -35,6 +37,10 @@ export function getPaginationMeta<T>(
         end: Math.max(result.total - 1, 0),
         perPage: params.perPage,
         totalItems: result.total,
+        currentPage: Math.floor(start / params.perPage) + 1,
+        totalPages: parseInt(
+            Math.ceil(result.total / params.perPage).toString()
+        ),
     };
 }
 
