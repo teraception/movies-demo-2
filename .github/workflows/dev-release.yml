@@ -20,4 +20,4 @@ jobs:
             deployment_webhook_url: ${{ vars.deployment_webhook_url_dev }}
             COGNITO_POOL_ID: ${{ vars.COGNITO_POOL_ID_DEV }}
             COGNITO_CLIENT_ID: ${{ vars.COGNITO_CLIENT_ID_DEV }}
-           secrets: inherit
+        secrets: inherit
