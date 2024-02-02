@@ -37,6 +37,12 @@ on:
             docker_compose_path:
                 type: string
                 required: true
+            cognito_pool_id:
+                type: string
+                required: true
+            cognito_client_id:
+                type: string
+                required: true
 
 env:
     AWS_REGION: ${{ inputs.aws_region }}
@@ -73,6 +79,8 @@ jobs:
               uses: ./.github/actions/build-docker-image
               env:
                   DOCKER_PROJECT_PATH: ${{inputs.ecr_repo_url}}
+                  COGNITO_POOL_ID: ${{inputs.cognito_pool_id}}
+                  COGNITO_CLIENT_ID: ${{inputs.cognito_client_id}}
               with:
                   commit_sha: ${{ github.sha }}
                   release_version: ${{ env.RELEASE }}

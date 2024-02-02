@@ -13,6 +13,15 @@ RUN yarn install  --production=false
 COPY --chown=node ["./tsconfig*.json", "./next.config.mjs", "./tailwind.config.ts", ".sequelizerc"  ,"./postcss.config.js" , "./"]
 COPY --chown=node ["./public", "./public"]
 COPY --chown=node ["./src", "./src"]
+
+ARG COGNITO_CLIENT_ID
+ARG COGNITO_POOL_ID
+ARG AWS_REGION
+
+ENV NEXT_PUBLIC_AWS_REGION=$AWS_REGION
+ENV NEXT_PUBLIC_COGNITO_USER_POOL_ID=$COGNITO_CLIENT_ID
+ENV NEXT_PUBLIC_COGNITO_CLIENT_ID=$COGNITO_POOL_ID
+
 RUN yarn run build \
     && yarn install \
     && rm -r .next/cache

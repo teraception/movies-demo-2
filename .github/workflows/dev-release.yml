@@ -18,4 +18,6 @@ jobs:
             tailscale_login_server: ${{ vars.tailscale_login_server }}
             docker_compose_path: devops/docker/docker-compose.dev.yml
             deployment_webhook_url: ${{ vars.deployment_webhook_url_dev }}
-        secrets: inherit
+            COGNITO_POOL_ID: ${{ vars.COGNITO_POOL_ID_DEV }}
+            COGNITO_CLIENT_ID: ${{ vars.COGNITO_CLIENT_ID_DEV }}
+           secrets: inherit
