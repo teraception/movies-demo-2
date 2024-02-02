@@ -34,7 +34,7 @@ const MovieCard: React.FC<Props> = ({ movie, deleteMovie }) => {
             <div
                 className="pb-2 mb-1 relative group"
                 style={{ aspectRatio: "133/200" }}>
-                <Image
+                <img
                     style={{
                         aspectRatio: "133/200",
                     }}
