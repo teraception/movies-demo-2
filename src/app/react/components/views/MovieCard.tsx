@@ -30,7 +30,7 @@ const MovieCard: React.FC<Props> = ({ movie, deleteMovie }) => {
     return (
         <div
             onClick={() => router.push(`/movie/${movie.id}`)}
-            className="hover:bg-[#1e414e] bg-appColor rounded-[12px] p-4 pb-8 md:p-2 md:pb-4 cursor-pointer duration-500 hover:bg-red">
+            className="bg-[#1e414e] bg-appColor rounded-[12px] p-4 pb-8 md:p-2 md:pb-4 cursor-pointer duration-500 hover:bg-red">
             <div
                 className="pb-2 mb-1 relative group"
                 style={{ aspectRatio: "133/200" }}>
