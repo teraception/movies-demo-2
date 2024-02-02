@@ -90,7 +90,7 @@ jobs:
               with:
                   fetch-depth: 0
             - name: Update image version
-              run: sed -E -i 's/(image:.*movies-demo:).*$/\1'"$RELEASE"'/g' ${{ inputs.docker_compose_path }} && cat ${{ inputs.docker_compose_path }}
+              run: sed -E -i 's/(image:.*movies-demo-2:).*$/\1'"$RELEASE"'/g' ${{ inputs.docker_compose_path }} && cat ${{ inputs.docker_compose_path }}
               shell: bash
             - name: Commit changes
 
