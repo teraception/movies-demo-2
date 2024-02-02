@@ -3,7 +3,7 @@ version: "3"
 services:
     movie-demo:
         restart: always
-        image: 415579337695.dkr.ecr.us-east-2.amazonaws.com/movies-demo-2-dev-movies-demo-2:18
+        image: 415579337695.dkr.ecr.us-east-2.amazonaws.com/movies-demo-2-dev-movies-demo-2:1
         labels:
             - "traefik.enable=true"
             - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
@@ -47,7 +47,7 @@ services:
         expose:
             - 5432
         ports:
-            - 5437:5432
+            - 5438:5432
         environment:
             - POSTGRES_PASSWORD=${DB_PASSWORD}
             - POSTGRES_DB=${DB_NAME}
