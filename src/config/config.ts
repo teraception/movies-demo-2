@@ -6,9 +6,9 @@ export const appConfig = {
         bucket: process.env.AWS_BUCKET_NAME as string,
     },
     cognitoAuth: {
-        region: process.env.NEXT_PUBLIC_AWS_REGION as string,
-        userPoolWebClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID,
-        userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
+        region: "us-east-2",
+        userPoolWebClientId: "2ogn6tcponqvi391ip1fbf7oe6",
+        userPoolId: "us-east-2_Pf3jIbG1V",
         mandatorySignIn: true,
     },
     database: {
